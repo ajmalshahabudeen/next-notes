@@ -38,33 +38,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			}
 			return session
 		},
-		signIn: async ({ user, account, profile, email }) => {
-			console.log({ user, account, profile, email })
-			if (account?.provider === "google") {
-				try {
-					const user = await prisma.user.findUnique({
-						where: {
-							email: profile?.email as string,
-						},
-					})
-					if (!user) {
-						console.log("User not found")
-						return false
-					} else {
-						console.log("User found", user)
-						return user.status === "ACTIVE"
-					}
+		// signIn: async ({ user, account, profile, email }) => {
+		// 	console.log({ user, account, profile, email })
+		// 	if (account?.provider === "google") {
+		// 		try {
+		// 			const user = await prisma.user.findUnique({
+		// 				where: {
+		// 					email: profile?.email as string,
+		// 				},
+		// 			})
+		// 			if (!user) {
+		// 				console.log("User not found")
+		// 				return false
+		// 			} else {
+		// 				console.log("User found", user)
+		// 				return user.status === "ACTIVE"
+		// 			}
 					
-				} catch (error) {
-                    console.log(error)
-					return false
-				}
-			}
-			if ((user as UserType).status === "ACTIVE") {
-				return true
-			}
-			return false
-		}
+		// 		} catch (error) {
+        //             console.log(error)
+		// 			return false
+		// 		}
+		// 	}
+		// 	if ((user as UserType).status === "ACTIVE") {
+		// 		return true
+		// 	}
+		// 	return false
+		// }
 	},
 })
 
