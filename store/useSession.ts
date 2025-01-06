@@ -6,6 +6,7 @@ import { persist } from "zustand/middleware"
 interface SessionStore {
     session: Session | null
     getSession: () => Promise<void>
+    clearSession: () => void
 }
 
 export const useSessionStore = create(
@@ -17,6 +18,7 @@ export const useSessionStore = create(
                     set({ session })
                 })
             },
+            clearSession: () => set({ session: null }),
         }),
         {
             name: "session",

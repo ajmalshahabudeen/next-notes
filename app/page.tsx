@@ -1,4 +1,5 @@
 "use client"
+import { LogoutIconButton } from "@/components/Buttons/logout"
 import SignIn from "@/components/Buttons/sign-in"
 import { Button } from "@/components/ui/button"
 import { useSessionStore } from "@/store/useSession"
@@ -20,8 +21,9 @@ export default function Home() {
 				</p>
 			</div>
 			{session && (
-				<div className='absolute bottom-20'>
+				<div className='absolute bottom-20 inline-flex gap-2 items-center'>
 					<Button size={"lg"}>Create Note</Button>
+          <LogoutIconButton />
 				</div>
 			)}
 			{!session && (
