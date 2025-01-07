@@ -1,13 +1,22 @@
 "use client"
 import { Textarea } from "@/components/ui/textarea"
-import { useState } from "react"
+import { useNoteStore } from "@/store/useNote"
+import { useEffect } from "react"
 
 const NotePage = () => {
-	const [note, setNote] = useState("")
+  const saveNote = useNoteStore((state) => state.setNote)
+  const saveToDB = useNoteStore((state) => state.saveToDB)
+  const note = useNoteStore((state) => state.note)
+  const setId = useNoteStore((state) => state.setId)
+
+  useEffect(() => {
+    setId()
+  }, [setId])
 
 	const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setNote(e.target.value)
-		console.log(note)
+		// console.log(note)
+    saveToDB()
+    saveNote(e.target.value)
 	}
 
 	return (
