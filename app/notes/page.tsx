@@ -3,7 +3,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useState } from "react"
 
 const NotePage = () => {
-	const [note, setNote] = useState("Type Something...")
+	const [note, setNote] = useState("")
 
 	const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setNote(e.target.value)
@@ -16,6 +16,8 @@ const NotePage = () => {
 				<Textarea
 					onChange={(e) => handleInput(e)}
 					value={note}
+          autoSave="true"
+          placeholder="Take a note..."
 					className='min-h-screen ring-0 ring-transparent focus:ring-0 shadow-none border-none'
 				/>
 			</div>
