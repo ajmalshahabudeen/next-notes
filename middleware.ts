@@ -1,6 +1,6 @@
 import { auth } from "@/auth"
 
-const dashboardPage = /^\/notes(?:\/.*)?$/
+const dashboardPage = /^\/es(?:\/.*)?$/
 
 export default auth((req) => {
 	// if user is authenticated, redirect to the home page

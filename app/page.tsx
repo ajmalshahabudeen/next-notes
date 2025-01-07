@@ -3,10 +3,12 @@ import { LogoutIconButton } from "@/components/Buttons/logout"
 import SignIn from "@/components/Buttons/sign-in"
 import { Button } from "@/components/ui/button"
 import { useSessionStore } from "@/store/useSession"
+import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { TypeAnimation } from "react-type-animation"
 
 export default function Home() {
+	const rc = useRouter()
 	const session = useSessionStore((state) => state.session)
 	const getSession = useSessionStore((state) => state.getSession)
 	useEffect(() => {
@@ -22,13 +24,13 @@ export default function Home() {
 			</div>
 			{session && (
 				<div className='absolute bottom-20 inline-flex gap-2 items-center'>
-					<Button size={"lg"}>Create Note</Button>
+					<Button onClick={() => rc.push("/notes")} size={"lg"}>Create Note</Button>
           <LogoutIconButton />
 				</div>
 			)}
 			{!session && (
 				<div className='absolute bottom-20 inline-flex gap-2 items-center'>
-					<Button size={"lg"}>Create Note</Button>
+					<Button onClick={() => rc.push("/notes")} size={"lg"}>Create Note</Button>
 					or
 					<SignIn />
 				</div>
