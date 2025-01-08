@@ -96,7 +96,7 @@ model SharedNote {
   id        String   @id @default(cuid())
   noteId    String
   editable  Boolean
-  private   Boolean
+  isPrivate Boolean
   emails    String[]
   createdAt DateTime @default(now())
   note      Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)

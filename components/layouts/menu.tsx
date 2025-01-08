@@ -29,8 +29,12 @@ import { useSessionStore } from "@/store/useSession"
 import { SignInIcon } from "../Buttons/sign-in"
 import { Input } from "../ui/input"
 import History from "@/components/user/history"
+import { Checkbox } from "@/components/ui/checkbox"
+import copy from 'copy-to-clipboard';
+import { createSharedNote } from "@/server/SharedNotes"
 
 export const Menu = () => {
+	const noteID = useNoteStore((state) => state.id)
 	const setNewId = useNoteStore((state) => state.setNewId)
 	const clearNote = useNoteStore((state) => state.clearNote)
 	const session = useSessionStore((state) => state.session)
@@ -38,6 +42,12 @@ export const Menu = () => {
 	const title = useNoteStore((state) => state.title)
 	const setTitle = useNoteStore((state) => state.setTitle)
 	const saveToDB = useNoteStore((state) => state.saveToDB)
+
+	const [checked, setChecked] = React.useState(false)
+	const [privateChecked, setPrivateChecked] = React.useState(false)
+	const [linkLoading, setLinkLoading] = React.useState(false)
+	const [linkError, setLinkError] = React.useState(false)
+	const [linkCopied, setLinkCopied] = React.useState(false)
 
 	const NewNote = () => {
 		setNewId()
@@ -75,7 +85,7 @@ export const Menu = () => {
 			{open && (
 				<div className='flex gap-2 items-center'>
 					<motion.div
-					className="flex items-center"
+						className='flex items-center'
 						initial={{
 							opacity: 0,
 						}}
@@ -123,7 +133,7 @@ export const Menu = () => {
 						</TooltipProvider>
 					</motion.div>
 					<motion.div
-					className="flex items-center"
+						className='flex items-center'
 						initial={{
 							opacity: 0,
 						}}
@@ -136,8 +146,77 @@ export const Menu = () => {
 						}}>
 						<TooltipProvider>
 							<Tooltip>
-								<TooltipTrigger>
-									<GoShareAndroid size={24} />
+								<TooltipTrigger asChild>
+									<Dialog>
+										<DialogTrigger>
+											<GoShareAndroid size={24} />
+										</DialogTrigger>
+										<DialogContent className='max-w-[90%] md:w-auto'>
+											<DialogHeader>
+												<DialogTitle className="text-start">
+													Share Note
+												</DialogTitle>
+												<DialogDescription className="text-start">
+													Share your notes with other
+													users
+												</DialogDescription>
+												<section className="flex flex-col gap-2">
+													<div className="flex items-center gap-2">
+														<Checkbox
+															checked={checked}
+															onCheckedChange={() =>
+																setChecked(
+																	!checked
+																)
+															}
+														/>
+														<p>Editable</p>
+													</div>
+													<div className="flex items-center gap-2">
+														<Checkbox
+															checked={
+																privateChecked
+															}
+															onCheckedChange={() =>
+																setPrivateChecked(
+																	!privateChecked
+																)
+															}
+														/>
+														<p>Private</p>
+													</div>
+													<Button onClick={async () => {
+														setLinkLoading(true)
+														await createSharedNote(noteID, checked, privateChecked).then((res) => {
+															setLinkLoading(false)
+															// console.log(res)
+															if (res.status === 200) {
+																copy(
+																	window.location.origin + "/notes/shared/" + res.data
+																)
+																setLinkCopied(true)
+																setLinkError(false)
+																setTimeout(() => {
+																	setLinkCopied(false)
+																}, 2000)
+															} else {
+																setLinkCopied(false)
+																setLinkError(true)
+																setTimeout(() => {
+																	setLinkError(false)
+																}, 5000)
+															}
+														})
+													}}>
+														{linkLoading ? 
+															"Creating..."
+														: linkCopied ? <p className="text-green-400">Copied</p> : "Create"}
+													</Button>
+													{linkError && <p className="text-red-600">Error while creating link</p>}
+												</section>
+											</DialogHeader>
+										</DialogContent>
+									</Dialog>
 								</TooltipTrigger>
 								<TooltipContent>
 									<p>Share</p>
@@ -146,7 +225,7 @@ export const Menu = () => {
 						</TooltipProvider>
 					</motion.div>
 					<motion.div
-					className="flex items-center"
+						className='flex items-center'
 						initial={{
 							opacity: 0,
 						}}
@@ -206,7 +285,7 @@ export const Menu = () => {
 						<TooltipProvider>
 							<Tooltip>
 								<TooltipTrigger asChild>
-								<History />
+									<History />
 								</TooltipTrigger>
 								<TooltipContent>
 									<p>View History</p>
