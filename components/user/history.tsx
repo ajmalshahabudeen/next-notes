@@ -15,6 +15,7 @@ import { GoHistory } from "react-icons/go"
 import { useHistoryStore } from "@/store/useHistory"
 import { useSessionStore } from "@/store/useSession"
 import { FaTrashCanArrowUp } from "react-icons/fa6"
+import SignIn from "../Buttons/sign-in"
 
 const History = () => {
 	const history = useHistoryStore((state) => state.history)
@@ -40,6 +41,12 @@ const History = () => {
 						<DrawerTitle>History</DrawerTitle>
 						<DrawerDescription>view past notes.</DrawerDescription>
 					</DrawerHeader>
+					{!session && (
+						<div className='flex flex-col gap-2 justify-center items-center h-full'>
+							<p>Login to see History</p>
+							<SignIn />
+						</div>
+					)}
 					<section>
 						{loading ? (
 							<p className='text-2xl'>Loading...</p>
@@ -54,8 +61,13 @@ const History = () => {
 										<div
 											className='flex justify-between border rounded px-5 py-2 hover:border-black'
 											key={item.id}>
-											<p className='hover:underline'>{item.title}</p>
-											<FaTrashCanArrowUp className="text-red-500" size={24} />
+											<p className='hover:underline'>
+												{item.title}
+											</p>
+											<FaTrashCanArrowUp
+												className='text-red-500'
+												size={24}
+											/>
 										</div>
 									))}
 								</div>
