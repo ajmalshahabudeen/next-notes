@@ -27,12 +27,17 @@ import { Button } from "../ui/button"
 import { LogoutIcon } from "../Buttons/logout"
 import { useSessionStore } from "@/store/useSession"
 import { SignInIcon } from "../Buttons/sign-in"
+import { Input } from "../ui/input"
 
 export const Menu = () => {
 	const setNewId = useNoteStore((state) => state.setNewId)
 	const clearNote = useNoteStore((state) => state.clearNote)
 	const session = useSessionStore((state) => state.session)
 	const getSession = useSessionStore((state) => state.getSession)
+	const title = useNoteStore((state) => state.title)
+	const setTitle = useNoteStore((state) => state.setTitle)
+	const saveToDB = useNoteStore((state) => state.saveToDB)
+
 	const NewNote = () => {
 		setNewId()
 		clearNote()
@@ -77,8 +82,37 @@ export const Menu = () => {
 						}}>
 						<TooltipProvider>
 							<Tooltip>
-								<TooltipTrigger>
-									<MdOutlineTitle size={24} />
+								<TooltipTrigger asChild>
+									<Dialog>
+										<DialogTrigger>
+											<MdOutlineTitle size={24} />
+										</DialogTrigger>
+										<DialogContent className='max-w-[90%] md:w-auto'>
+											<DialogHeader>
+												<DialogTitle>
+													Give it a title
+												</DialogTitle>
+												<DialogDescription className='flex flex-col gap-2'>
+													<Input
+														value={title}
+														onChange={(e) =>
+															setTitle(
+																e.target.value
+															)
+														}
+													/>
+													<DialogClose asChild>
+														<Button
+															onClick={() =>
+																saveToDB()
+															}>
+															Save
+														</Button>
+													</DialogClose>
+												</DialogDescription>
+											</DialogHeader>
+										</DialogContent>
+									</Dialog>
 								</TooltipTrigger>
 								<TooltipContent>
 									<p>Edit Title</p>
