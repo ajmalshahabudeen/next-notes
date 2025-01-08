@@ -17,6 +17,7 @@ interface NoteStore {
 	setNote: (note: string) => void
 	saveToDB: () => Promise<void>
 	clearNote: () => void
+	loadFromHistory: (id: string, title: string, note: string) => void
 }
 
 export const useNoteStore = create(
@@ -85,6 +86,9 @@ export const useNoteStore = create(
 					})
 			},
 			clearNote: () => set({ title: "", note: "" }),
+			loadFromHistory: (id: string, title: string, note: string) => {
+				set({ id: id, title: title, note: note })
+			},
 		}),
 		{
 			name: "note",

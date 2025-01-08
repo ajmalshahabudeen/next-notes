@@ -15,7 +15,8 @@ import { GoHistory } from "react-icons/go"
 import { useHistoryStore } from "@/store/useHistory"
 import { useSessionStore } from "@/store/useSession"
 import { FaTrashCanArrowUp } from "react-icons/fa6"
-import SignIn from "../Buttons/sign-in"
+import SignIn from "@/components/Buttons/sign-in"
+import { useNoteStore } from "@/store/useNote"
 
 const History = () => {
 	const history = useHistoryStore((state) => state.history)
@@ -23,6 +24,7 @@ const History = () => {
 	const error = useHistoryStore((state) => state.error)
 	const getHistory = useHistoryStore((state) => state.getHistory)
 	const session = useSessionStore((state) => state.session)
+	const loadFromHistory = useNoteStore((state) => state.loadFromHistory)
 
 	useEffect(() => {
 		if (session) {
@@ -61,9 +63,20 @@ const History = () => {
 										<div
 											className='flex justify-between border rounded px-5 py-2 hover:border-black'
 											key={item.id}>
-											<p className='hover:underline'>
-												{item.title}
-											</p>
+											<DrawerClose>
+												<p
+													onClick={() => {
+														getHistory()
+														loadFromHistory(
+															item.id,
+															item.title,
+															item.note
+														)
+													}}
+													className='hover:underline'>
+													{item.title}
+												</p>
+											</DrawerClose>
 											<FaTrashCanArrowUp
 												className='text-red-500'
 												size={24}
