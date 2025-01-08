@@ -17,8 +17,10 @@ import { useSessionStore } from "@/store/useSession"
 import { FaTrashCanArrowUp } from "react-icons/fa6"
 import SignIn from "@/components/Buttons/sign-in"
 import { useNoteStore } from "@/store/useNote"
+import { useRouter } from "next/navigation"
 
 const History = () => {
+	const rc = useRouter()
 	const history = useHistoryStore((state) => state.history)
 	const loading = useHistoryStore((state) => state.loading)
 	const error = useHistoryStore((state) => state.error)
@@ -49,44 +51,47 @@ const History = () => {
 							<SignIn />
 						</div>
 					)}
-					<section>
-						{loading ? (
-							<p className='text-2xl'>Loading...</p>
-						) : error ? (
-							<p className='text-red-500 text-2xl'>
-								Something went wrong
-							</p>
-						) : (
-							<div className='p-5'>
-								<div className='flex flex-col gap-5'>
-									{history.map((item) => (
-										<div
-											className='flex justify-between border rounded px-5 py-2 hover:border-black'
-											key={item.id}>
-											<DrawerClose>
-												<p
-													onClick={() => {
-														getHistory()
-														loadFromHistory(
-															item.id,
-															item.title,
-															item.note
-														)
-													}}
-													className='hover:underline'>
-													{item.title}
-												</p>
-											</DrawerClose>
-											<FaTrashCanArrowUp
-												className='text-red-500'
-												size={24}
-											/>
-										</div>
-									))}
+					{session && (
+						<section>
+							{loading ? (
+								<p className='text-2xl'>Loading...</p>
+							) : error ? (
+								<p className='text-red-500 text-2xl'>
+									Something went wrong
+								</p>
+							) : (
+								<div className='p-5'>
+									<div className='flex flex-col gap-5'>
+										{history.map((item) => (
+											<div
+												className='flex justify-between border rounded px-5 py-2 hover:border-black'
+												key={item.id}>
+												<DrawerClose>
+													<p
+														onClick={() => {
+															rc.push("/notes")
+															getHistory()
+															loadFromHistory(
+																item.id,
+																item.title,
+																item.note
+															)
+														}}
+														className='hover:underline'>
+														{item.title}
+													</p>
+												</DrawerClose>
+												<FaTrashCanArrowUp
+													className='text-red-500'
+													size={24}
+												/>
+											</div>
+										))}
+									</div>
 								</div>
-							</div>
-						)}
-					</section>
+							)}
+						</section>
+					)}
 					<DrawerFooter>
 						<DrawerClose asChild>
 							<Button variant='outline'>Close</Button>
