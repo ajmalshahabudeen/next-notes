@@ -14,6 +14,8 @@ interface SharedNoteStore {
     notAuth: boolean
     sharedNoteLoading: boolean
     sharedNotError: boolean
+    editable: boolean
+    isPrivate: boolean
     setId: () => void
     setNewId: () => void
     setTitle: (title: string) => void
@@ -36,6 +38,8 @@ export const useSharedNoteStore = create(
             notAuth: false,
             sharedNoteLoading: false,
             sharedNotError: false,
+            editable: false,
+            isPrivate: false,
             setId: async () => {
                 if (useSharedNoteStore.getState().id === "") {
                     await GenNoteID().then((id) => {
@@ -103,6 +107,8 @@ export const useSharedNoteStore = create(
                             set({ id: r.data?.note.id as string })
                             set({ title: r.data?.note.title as string })
                             set({ note: r.data?.note.note as string })
+                            set({ isPrivate: r.data?.isPrivate as boolean })
+                            set({ editable: r.data?.editable as boolean })
                             set({ sharedNoteLoading: false })
                             set({ sharedNotError: false })
                             break

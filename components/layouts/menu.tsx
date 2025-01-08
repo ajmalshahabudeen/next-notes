@@ -30,10 +30,12 @@ import { SignInIcon } from "../Buttons/sign-in"
 import { Input } from "../ui/input"
 import History from "@/components/user/history"
 import { Checkbox } from "@/components/ui/checkbox"
-import copy from 'copy-to-clipboard';
+import copy from "copy-to-clipboard"
 import { createSharedNote } from "@/server/SharedNotes"
+import { useRouter } from "next/navigation"
 
 export const Menu = () => {
+	const rc = useRouter()
 	const noteID = useNoteStore((state) => state.id)
 	const setNewId = useNoteStore((state) => state.setNewId)
 	const clearNote = useNoteStore((state) => state.clearNote)
@@ -153,15 +155,15 @@ export const Menu = () => {
 										</DialogTrigger>
 										<DialogContent className='max-w-[90%] md:w-auto'>
 											<DialogHeader>
-												<DialogTitle className="text-start">
+												<DialogTitle className='text-start'>
 													Share Note
 												</DialogTitle>
-												<DialogDescription className="text-start">
+												<DialogDescription className='text-start'>
 													Share your notes with other
 													users
 												</DialogDescription>
-												<section className="flex flex-col gap-2">
-													<div className="flex items-center gap-2">
+												<section className='flex flex-col gap-2'>
+													<div className='flex items-center gap-2'>
 														<Checkbox
 															checked={checked}
 															onCheckedChange={() =>
@@ -172,7 +174,7 @@ export const Menu = () => {
 														/>
 														<p>Editable</p>
 													</div>
-													<div className="flex items-center gap-2">
+													<div className='flex items-center gap-2'>
 														<Checkbox
 															checked={
 																privateChecked
@@ -185,34 +187,77 @@ export const Menu = () => {
 														/>
 														<p>Private</p>
 													</div>
-													<Button onClick={async () => {
-														setLinkLoading(true)
-														await createSharedNote(noteID, checked, privateChecked).then((res) => {
-															setLinkLoading(false)
-															// console.log(res)
-															if (res.status === 200) {
-																copy(
-																	window.location.origin + "/notes/shared/" + res.data
+													<Button
+														onClick={async () => {
+															setLinkLoading(true)
+															await createSharedNote(
+																noteID,
+																checked,
+																privateChecked
+															).then((res) => {
+																setLinkLoading(
+																	false
 																)
-																setLinkCopied(true)
-																setLinkError(false)
-																setTimeout(() => {
-																	setLinkCopied(false)
-																}, 2000)
-															} else {
-																setLinkCopied(false)
-																setLinkError(true)
-																setTimeout(() => {
-																	setLinkError(false)
-																}, 5000)
-															}
-														})
-													}}>
-														{linkLoading ? 
+																// console.log(res)
+																if (
+																	res.status ===
+																	200
+																) {
+																	copy(
+																		window
+																			.location
+																			.origin +
+																			"/notes/shared/" +
+																			res.data
+																	)
+																	setLinkCopied(
+																		true
+																	)
+																	setLinkError(
+																		false
+																	)
+																	setTimeout(
+																		() => {
+																			setLinkCopied(
+																				false
+																			)
+																		},
+																		2000
+																	)
+																} else {
+																	setLinkCopied(
+																		false
+																	)
+																	setLinkError(
+																		true
+																	)
+																	setTimeout(
+																		() => {
+																			setLinkError(
+																				false
+																			)
+																		},
+																		5000
+																	)
+																}
+															})
+														}}>
+														{linkLoading ? (
 															"Creating..."
-														: linkCopied ? <p className="text-green-400">Copied</p> : "Create"}
+														) : linkCopied ? (
+															<p className='text-green-400'>
+																Copied
+															</p>
+														) : (
+															"Create"
+														)}
 													</Button>
-													{linkError && <p className="text-red-600">Error while creating link</p>}
+													{linkError && (
+														<p className='text-red-600'>
+															Error while creating
+															link
+														</p>
+													)}
 												</section>
 											</DialogHeader>
 										</DialogContent>
@@ -257,7 +302,11 @@ export const Menu = () => {
 											</DialogHeader>
 											<DialogFooter>
 												<DialogClose asChild>
-													<Button onClick={NewNote}>
+													<Button
+														onClick={() => {
+															rc.push("/notes")
+															NewNote()
+														}}>
 														Yes
 													</Button>
 												</DialogClose>

@@ -6,6 +6,7 @@ import { useNoteStore } from "@/store/useNote"
 import { AiOutlineLoading } from "react-icons/ai"
 import { useSharedNoteStore } from "@/store/useShared"
 import { RxLinkBreak2 } from "react-icons/rx";
+import { useSessionStore } from "@/store/useSession"
 
 const ShredNotePage = (props: { params: Promise<{ id: string }> }) => {
 	const params = use(props.params)
@@ -21,6 +22,9 @@ const ShredNotePage = (props: { params: Promise<{ id: string }> }) => {
 		(state) => state.sharedNoteLoading
 	)
 	const sharedNotError = useSharedNoteStore((state) => state.sharedNotError)
+	const editable = useSharedNoteStore((state) => state.editable)
+	const isPrivate = useSharedNoteStore((state) => state.isPrivate)
+	const session = useSessionStore((state) => state.session)
 
 	useEffect(() => {
 		loadFromShared(id)
@@ -40,7 +44,7 @@ const ShredNotePage = (props: { params: Promise<{ id: string }> }) => {
 					<div className='flex justify-center items-center h-screen'>
 						<AiOutlineLoading className='animate-spin' size={54} />
 					</div>
-				) : sharedNotError ? (
+				) : (sharedNotError || (!session && isPrivate)) ? (
 					<div className='flex flex-col gap-3 justify-center items-center h-screen'>
                         <RxLinkBreak2 size={54} className="text-red-400"/>
                         <p className="text-2xl">Note not found</p>
@@ -48,6 +52,7 @@ const ShredNotePage = (props: { params: Promise<{ id: string }> }) => {
 				) : (
 					<Textarea
 						onChange={(e) => handleInput(e)}
+						readOnly={!editable}
 						value={note}
 						autoSave='true'
 						placeholder='Take a note...'
