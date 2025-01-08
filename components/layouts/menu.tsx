@@ -2,7 +2,7 @@
 import React, { useEffect } from "react"
 import { BsPlusCircleFill } from "react-icons/bs"
 import { MdOutlineTitle } from "react-icons/md"
-import { GoHistory, GoShareAndroid } from "react-icons/go"
+import { GoShareAndroid } from "react-icons/go"
 import { motion } from "motion/react"
 import { FaCircleMinus } from "react-icons/fa6"
 import { GrChapterAdd } from "react-icons/gr"
@@ -28,6 +28,7 @@ import { LogoutIcon } from "../Buttons/logout"
 import { useSessionStore } from "@/store/useSession"
 import { SignInIcon } from "../Buttons/sign-in"
 import { Input } from "../ui/input"
+import History from "@/components/user/history"
 
 export const Menu = () => {
 	const setNewId = useNoteStore((state) => state.setNewId)
@@ -72,8 +73,9 @@ export const Menu = () => {
 				)}
 			</motion.div>
 			{open && (
-				<div className='flex gap-2'>
+				<div className='flex gap-2 items-center'>
 					<motion.div
+					className="flex items-center"
 						initial={{
 							opacity: 0,
 						}}
@@ -121,6 +123,7 @@ export const Menu = () => {
 						</TooltipProvider>
 					</motion.div>
 					<motion.div
+					className="flex items-center"
 						initial={{
 							opacity: 0,
 						}}
@@ -143,6 +146,7 @@ export const Menu = () => {
 						</TooltipProvider>
 					</motion.div>
 					<motion.div
+					className="flex items-center"
 						initial={{
 							opacity: 0,
 						}}
@@ -201,8 +205,8 @@ export const Menu = () => {
 						}}>
 						<TooltipProvider>
 							<Tooltip>
-								<TooltipTrigger>
-									<GoHistory size={24} />
+								<TooltipTrigger asChild>
+								<History />
 								</TooltipTrigger>
 								<TooltipContent>
 									<p>View History</p>
