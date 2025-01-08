@@ -1,5 +1,6 @@
 import { Menu } from "@/components/layouts/menu"
 import type { Metadata } from "next"
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
 	title: "Notes - Next NoteBook",
@@ -15,6 +16,7 @@ export default function RootLayout({
 		<div>
 			{children}
 			<Menu />
+			<Toaster />
 		</div>
 	)
 }

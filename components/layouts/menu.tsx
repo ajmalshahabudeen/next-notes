@@ -1,8 +1,8 @@
 "use client"
-import React from "react"
+import React, { useEffect } from "react"
 import { BsPlusCircleFill } from "react-icons/bs"
-import { CiEdit, CiShare2 } from "react-icons/ci"
-import { GoHistory } from "react-icons/go"
+import { MdOutlineTitle } from "react-icons/md"
+import { GoHistory, GoShareAndroid } from "react-icons/go"
 import { motion } from "motion/react"
 import { FaCircleMinus } from "react-icons/fa6"
 import { GrChapterAdd } from "react-icons/gr"
@@ -24,15 +24,22 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog"
 import { Button } from "../ui/button"
+import { LogoutIcon } from "../Buttons/logout"
+import { useSessionStore } from "@/store/useSession"
+import { SignInIcon } from "../Buttons/sign-in"
 
 export const Menu = () => {
 	const setNewId = useNoteStore((state) => state.setNewId)
 	const clearNote = useNoteStore((state) => state.clearNote)
-
+	const session = useSessionStore((state) => state.session)
+	const getSession = useSessionStore((state) => state.getSession)
 	const NewNote = () => {
 		setNewId()
 		clearNote()
 	}
+	useEffect(() => {
+		getSession()
+	}, [getSession])
 
 	const [open, setOpen] = React.useState(false)
 	return (
@@ -71,7 +78,7 @@ export const Menu = () => {
 						<TooltipProvider>
 							<Tooltip>
 								<TooltipTrigger>
-									<CiEdit size={24} />
+									<MdOutlineTitle size={24} />
 								</TooltipTrigger>
 								<TooltipContent>
 									<p>Edit Title</p>
@@ -93,7 +100,7 @@ export const Menu = () => {
 						<TooltipProvider>
 							<Tooltip>
 								<TooltipTrigger>
-									<CiShare2 size={24} />
+									<GoShareAndroid size={24} />
 								</TooltipTrigger>
 								<TooltipContent>
 									<p>Share</p>
@@ -119,24 +126,25 @@ export const Menu = () => {
 										<DialogTrigger>
 											<GrChapterAdd size={24} />
 										</DialogTrigger>
-										<DialogContent className="max-w-[90%] md:w-auto">
+										<DialogContent className='max-w-[90%] md:w-auto'>
 											<DialogHeader>
 												<DialogTitle>
 													Confirm
 												</DialogTitle>
 												<DialogDescription>
-													Clear current note and start a new note.
-                                                    Notes are saved automatically and can be 
-                                                    viewed in the history.
+													Clear current note and start
+													a new note. Notes are saved
+													automatically and can be
+													viewed in the history.
 												</DialogDescription>
 											</DialogHeader>
-                                            <DialogFooter>
-                                                <DialogClose asChild>
-                                                <Button onClick={NewNote}>
-                                                    Yes
-                                                </Button>
-                                                </DialogClose>
-                                            </DialogFooter>
+											<DialogFooter>
+												<DialogClose asChild>
+													<Button onClick={NewNote}>
+														Yes
+													</Button>
+												</DialogClose>
+											</DialogFooter>
 										</DialogContent>
 									</Dialog>
 								</TooltipTrigger>
@@ -164,6 +172,28 @@ export const Menu = () => {
 								</TooltipTrigger>
 								<TooltipContent>
 									<p>View History</p>
+								</TooltipContent>
+							</Tooltip>
+						</TooltipProvider>
+					</motion.div>
+					<motion.div
+						initial={{
+							opacity: 0,
+						}}
+						transition={{
+							delay: 0.3,
+						}}
+						animate={{
+							opacity: 1,
+							x: open ? 40 : 0,
+						}}>
+						<TooltipProvider>
+							<Tooltip>
+								<TooltipTrigger asChild>
+									{session ? <LogoutIcon /> : <SignInIcon />}
+								</TooltipTrigger>
+								<TooltipContent>
+									<p>Sign Out</p>
 								</TooltipContent>
 							</Tooltip>
 						</TooltipProvider>

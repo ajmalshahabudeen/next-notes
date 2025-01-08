@@ -8,7 +8,9 @@ interface NoteStore {
 	title: string
 	note: string
 	saving: boolean
-    error: boolean
+	saved: boolean
+	error: boolean
+	notAuth: boolean
 	setId: () => void
 	setNewId: () => void
 	setTitle: (title: string) => void
@@ -24,7 +26,9 @@ export const useNoteStore = create(
 			title: "",
 			note: "",
 			saving: false,
-            error: false,
+			saved: false,
+			error: false,
+			notAuth: false,
 			setId: async () => {
 				if (useNoteStore.getState().id === "") {
 					await GenNoteID().then((id) => {
@@ -45,13 +49,40 @@ export const useNoteStore = create(
 					useNoteStore.getState().id,
 					useNoteStore.getState().title,
 					useNoteStore.getState().note
-				).then(() => {
-                    set({ saving: false })
-                    set({ error: false })
-                }).catch(() => {
-                    set({ saving: false })
-                    set({ error: true })
-                })
+				)
+					.then((r) => {
+						switch (r.status) {
+							case 200:
+								set({ saving: false })
+								set({ saved: true })
+								set({ error: false })
+								set({ notAuth: false })
+								setTimeout(() => {
+									set({ saved: false })
+								}, 2000)
+								break
+							case 401:
+								set({ saving: false })
+								set({ notAuth: true })
+								set({ error: false })
+								setTimeout(() => {
+									set({ notAuth: false })
+								}, 5000)
+								break
+							case 500:
+								set({ saving: false })
+								set({ error: true })
+								set({ notAuth: false })
+								setTimeout(() => {
+									set({ error: false })
+								}, 5000)
+								break
+						}
+					})
+					.catch(() => {
+						set({ saving: false })
+						set({ error: true })
+					})
 			},
 			clearNote: () => set({ title: "", note: "" }),
 		}),
