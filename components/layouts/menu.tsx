@@ -23,16 +23,17 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog"
-import { Button } from "../ui/button"
-import { LogoutIcon } from "../Buttons/logout"
+import { Button } from "@/components/ui/button"
+import { LogoutIcon } from "@/components/Buttons/logout"
 import { useSessionStore } from "@/store/useSession"
-import { SignInIcon } from "../Buttons/sign-in"
-import { Input } from "../ui/input"
+import { SignInIcon } from "@/components/Buttons/sign-in"
+import { Input } from "@/components/ui/input"
 import History from "@/components/user/history"
 import { Checkbox } from "@/components/ui/checkbox"
 import copy from "copy-to-clipboard"
 import { createSharedNote } from "@/server/SharedNotes"
 import { useRouter } from "next/navigation"
+import { ModeToggle } from "@/components/Buttons/ToggleTheme"
 
 export const Menu = () => {
 	const rc = useRouter()
@@ -72,14 +73,14 @@ export const Menu = () => {
 				}}>
 				{open ? (
 					<FaCircleMinus
-						size={30}
-						className='rounded-full shadow-lg'
+						size={40}
+						className='rounded-full'
 						onClick={() => setOpen(false)}
 					/>
 				) : (
 					<BsPlusCircleFill
 						onClick={() => setOpen(true)}
-						size={30}
+						size={40}
 						className='rounded-full shadow-lg'
 					/>
 				)}
@@ -352,6 +353,28 @@ export const Menu = () => {
 						animate={{
 							opacity: 1,
 							x: open ? 40 : 0,
+						}}>
+						<TooltipProvider>
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<ModeToggle />
+								</TooltipTrigger>
+								<TooltipContent>
+									<p>Sign Out</p>
+								</TooltipContent>
+							</Tooltip>
+						</TooltipProvider>
+					</motion.div>
+					<motion.div
+						initial={{
+							opacity: 0,
+						}}
+						transition={{
+							delay: 0.4,
+						}}
+						animate={{
+							opacity: 1,
+							x: open ? 50 : 0,
 						}}>
 						<TooltipProvider>
 							<Tooltip>

@@ -2,10 +2,9 @@
 import React, { use, useEffect } from "react"
 import { CloudSync } from "@/components/interactive/cloud"
 import { Textarea } from "@/components/ui/textarea"
-import { useNoteStore } from "@/store/useNote"
 import { AiOutlineLoading } from "react-icons/ai"
 import { useSharedNoteStore } from "@/store/useShared"
-import { RxLinkBreak2 } from "react-icons/rx";
+import { RxLinkBreak2 } from "react-icons/rx"
 import { useSessionStore } from "@/store/useSession"
 
 const ShredNotePage = (props: { params: Promise<{ id: string }> }) => {
@@ -13,9 +12,9 @@ const ShredNotePage = (props: { params: Promise<{ id: string }> }) => {
 	const id = params.id
 	console.log(id)
 
-	const saveNote = useNoteStore((state) => state.setNote)
-	const saveToDB = useNoteStore((state) => state.saveToDB)
-	const note = useNoteStore((state) => state.note)
+	const saveNote = useSharedNoteStore((state) => state.setNote)
+	const saveToDB = useSharedNoteStore((state) => state.saveToDB)
+	const note = useSharedNoteStore((state) => state.note)
 	// const setId = useNoteStore((state) => state.setId)
 	const loadFromShared = useSharedNoteStore((state) => state.loadFromShared)
 	const sharedNoteLoading = useSharedNoteStore(
@@ -44,11 +43,17 @@ const ShredNotePage = (props: { params: Promise<{ id: string }> }) => {
 					<div className='flex justify-center items-center h-screen'>
 						<AiOutlineLoading className='animate-spin' size={54} />
 					</div>
-				) : (sharedNotError || (!session && isPrivate)) ? (
+				) : sharedNotError || (!session && isPrivate) ? (
 					<div className='flex flex-col gap-3 justify-center items-center h-screen'>
-                        <RxLinkBreak2 size={54} className="text-red-400"/>
-                        <p className="text-2xl">Note not found</p>
-                    </div>
+						<RxLinkBreak2 size={54} className='text-red-400' />
+						<p className='text-2xl'>Note not found</p>
+						{!session && (
+							<p>
+								Try after logging in maybe it&apos;s a private
+								note
+							</p>
+						)}
+					</div>
 				) : (
 					<Textarea
 						onChange={(e) => handleInput(e)}

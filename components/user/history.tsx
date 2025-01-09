@@ -18,6 +18,7 @@ import { FaTrashCanArrowUp } from "react-icons/fa6"
 import SignIn from "@/components/Buttons/sign-in"
 import { useNoteStore } from "@/store/useNote"
 import { useRouter } from "next/navigation"
+import { AiOutlineLoading } from "react-icons/ai"
 
 const History = () => {
 	const rc = useRouter()
@@ -54,7 +55,9 @@ const History = () => {
 					{session && (
 						<section>
 							{loading ? (
-								<p className='text-2xl'>Loading...</p>
+								<div className="flex justify-center items-center">
+									<AiOutlineLoading className='animate-spin' size={54} />
+								</div>
 							) : error ? (
 								<p className='text-red-500 text-2xl'>
 									Something went wrong

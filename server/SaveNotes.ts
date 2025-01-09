@@ -43,7 +43,72 @@ export const SaveNotes = async (id: string, title: string, note: string) => {
 			status: 200,
 			message: "Note saved successfully",
 		}
+	} catch (error) {
+		console.log(error)
+		return {
+			status: 500,
+			message: "Error saving note",
+		}
+	}
+}
+export const SaveSharedNotes = async (
+	id: string,
+	shareID: string,
+	title: string,
+	note: string
+) => {
+	const session = await auth()
+	if (!session) {
+		console.log("Unauthorized")
+		return {
+			status: 401,
+			message: "Unauthorized",
+		}
+	}
 
+	const userId = session.user?.id as string
+
+	let newTitle = title
+	if (title.length === 0) newTitle = NoteTitleAutoGenerate()
+
+	try {
+		const sharedNote = await prisma.sharedNote.findUnique({
+			where: {
+				id: shareID,
+			},
+		})
+
+		if (sharedNote?.editable === false) {
+			return {
+				status: 401,
+				message: "Note is not editable",
+			}
+		}
+
+		console.log("saving note with id:", id)
+		await prisma.note.upsert({
+			where: {
+				id,
+			},
+			update: {
+				title: newTitle,
+				note: note,
+				updatedAt: new Date(),
+			},
+			create: {
+				id,
+				title: newTitle as string,
+				note: note as string,
+				userId,
+				updatedAt: new Date(),
+			},
+		})
+		console.log("Note saved with id:", id)
+
+		return {
+			status: 200,
+			message: "Note saved successfully",
+		}
 	} catch (error) {
 		console.log(error)
 		return {

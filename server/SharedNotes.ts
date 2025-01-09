@@ -25,6 +25,7 @@ export const SharedNote = async (id:string) => {
                 note: true,
             }
         })
+        console.log(sharedNote)
         return {
             status: 200,
             message: "Success",

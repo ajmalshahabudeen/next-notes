@@ -5,9 +5,9 @@ import "./globals.css"
 const poppins = Poppins({
 	variable: "--font-poppins",
 	subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+	weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 })
-
+import { ThemeProvider } from "@/components/theme-provider"
 
 export const metadata: Metadata = {
 	title: "Next NoteBook",
@@ -21,9 +21,14 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en' suppressHydrationWarning>
-			<body
-				className={`${poppins.variable} font-[poppins] antialiased`}>
-			{children}
+			<body className={`${poppins.variable} font-[poppins] antialiased`}>
+				<ThemeProvider
+					attribute='class'
+					defaultTheme='system'
+					enableSystem
+					disableTransitionOnChange>
+					{children}
+				</ThemeProvider>
 			</body>
 		</html>
 	)
