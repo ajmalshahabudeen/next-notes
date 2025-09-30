@@ -64,7 +64,7 @@ const History = () => {
 								</p>
 							) : (
 								<div className='p-5'>
-									<div className='flex flex-col gap-5'>
+									<div className='flex flex-col gap-5 overflow-y-auto max-h-[80vh]'>
 										{history.map((item) => (
 											<div
 												className='flex justify-between border rounded px-5 py-2 hover:border-black'
